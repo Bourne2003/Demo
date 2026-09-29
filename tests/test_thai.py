@@ -4,6 +4,7 @@ from demo_utils.thai import (
     be_to_ce,
     ce_to_be,
     from_thai_digits,
+    is_valid_thai_id,
     number_to_thai_words,
     to_thai_digits,
 )
@@ -61,3 +62,23 @@ def test_be_to_ce():
 
 def test_era_round_trip():
     assert be_to_ce(ce_to_be(1999)) == 1999
+
+
+@pytest.mark.parametrize("value", ["1234567890121", "1-2345-67890-12-1", "1 2345 67890 12 1"])
+def test_is_valid_thai_id_accepts_valid_numbers(value):
+    assert is_valid_thai_id(value)
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        "1234567890122",  # wrong check digit
+        "123456789012",  # too short
+        "12345678901234",  # too long
+        "12345678901a1",  # not a digit
+        "๑๒๓๔๕๖๗๘๙๐๑๒๑",  # Thai digits are not accepted
+        "",
+    ],
+)
+def test_is_valid_thai_id_rejects_invalid_numbers(value):
+    assert not is_valid_thai_id(value)
