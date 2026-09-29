@@ -1,5 +1,7 @@
 """Thai language helpers."""
 
+import datetime
+
 _ARABIC = "0123456789"
 _THAI = "๐๑๒๓๔๕๖๗๘๙"
 
@@ -98,3 +100,26 @@ def is_valid_thai_id(value: str) -> bool:
         return False
     total = sum(int(digit) * (13 - index) for index, digit in enumerate(digits[:12]))
     return (11 - total % 11) % 10 == int(digits[12])
+
+
+THAI_MONTHS = [
+    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+    "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",
+]
+THAI_MONTHS_SHORT = [
+    "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+    "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
+]
+
+
+def format_thai_date(
+    value: datetime.date, short: bool = False, thai_digits: bool = False
+) -> str:
+    """Format a date in Thai with a Buddhist Era year.
+
+    >>> format_thai_date(datetime.date(2026, 9, 29))
+    '29 กันยายน 2569'
+    """
+    months = THAI_MONTHS_SHORT if short else THAI_MONTHS
+    text = f"{value.day} {months[value.month - 1]} {ce_to_be(value.year)}"
+    return to_thai_digits(text) if thai_digits else text
