@@ -38,3 +38,13 @@ def truncate(value: str, length: int, suffix: str = "...") -> str:
     if length <= len(suffix):
         return suffix[:length]
     return value[: length - len(suffix)] + suffix
+
+
+def is_palindrome(value: str) -> bool:
+    """Check whether text reads the same backwards, ignoring case and punctuation.
+
+    >>> is_palindrome("A man, a plan, a canal: Panama")
+    True
+    """
+    letters = [char.casefold() for char in value if char.isalnum()]
+    return letters == letters[::-1]

@@ -1,6 +1,6 @@
 import pytest
 
-from demo_utils.text import slugify, truncate, word_count
+from demo_utils.text import is_palindrome, slugify, truncate, word_count
 
 
 def test_slugify_basic():
@@ -50,3 +50,15 @@ def test_truncate_length_shorter_than_suffix():
 def test_truncate_negative_length():
     with pytest.raises(ValueError):
         truncate("Hello", -1)
+
+
+@pytest.mark.parametrize(
+    "value", ["A man, a plan, a canal: Panama", "racecar", "12321", "", "ปิป"]
+)
+def test_is_palindrome_true(value):
+    assert is_palindrome(value)
+
+
+@pytest.mark.parametrize("value", ["hello", "12345", "ab"])
+def test_is_palindrome_false(value):
+    assert not is_palindrome(value)
