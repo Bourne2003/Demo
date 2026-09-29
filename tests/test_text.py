@@ -1,4 +1,4 @@
-from demo_utils.text import slugify
+from demo_utils.text import slugify, word_count
 
 
 def test_slugify_basic():
@@ -15,3 +15,15 @@ def test_slugify_custom_separator():
 
 def test_slugify_empty():
     assert slugify("!!!") == ""
+
+
+def test_word_count():
+    assert word_count("one two  three") == 3
+
+
+def test_word_count_newlines_and_tabs():
+    assert word_count("a\nb\tc ") == 3
+
+
+def test_word_count_empty():
+    assert word_count("   ") == 0
