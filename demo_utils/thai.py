@@ -65,3 +65,24 @@ def number_to_thai_words(number: int) -> str:
     if rest:
         words += _read_below_million(rest, after_higher=bool(millions))
     return words
+
+
+BUDDHIST_ERA_OFFSET = 543
+
+
+def ce_to_be(year: int) -> int:
+    """Convert a Common Era (ค.ศ.) year to a Buddhist Era (พ.ศ.) year.
+
+    >>> ce_to_be(2026)
+    2569
+    """
+    return year + BUDDHIST_ERA_OFFSET
+
+
+def be_to_ce(year: int) -> int:
+    """Convert a Buddhist Era (พ.ศ.) year to a Common Era (ค.ศ.) year.
+
+    >>> be_to_ce(2569)
+    2026
+    """
+    return year - BUDDHIST_ERA_OFFSET

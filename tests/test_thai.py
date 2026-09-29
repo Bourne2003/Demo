@@ -1,6 +1,12 @@
 import pytest
 
-from demo_utils.thai import from_thai_digits, number_to_thai_words, to_thai_digits
+from demo_utils.thai import (
+    be_to_ce,
+    ce_to_be,
+    from_thai_digits,
+    number_to_thai_words,
+    to_thai_digits,
+)
 
 
 def test_to_thai_digits():
@@ -43,3 +49,15 @@ def test_round_trip():
 )
 def test_number_to_thai_words(number, expected):
     assert number_to_thai_words(number) == expected
+
+
+def test_ce_to_be():
+    assert ce_to_be(2026) == 2569
+
+
+def test_be_to_ce():
+    assert be_to_ce(2569) == 2026
+
+
+def test_era_round_trip():
+    assert be_to_ce(ce_to_be(1999)) == 1999
