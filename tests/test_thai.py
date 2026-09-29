@@ -1,8 +1,11 @@
+import datetime
+
 import pytest
 
 from demo_utils.thai import (
     be_to_ce,
     ce_to_be,
+    format_thai_date,
     from_thai_digits,
     is_valid_thai_id,
     number_to_thai_words,
@@ -82,3 +85,22 @@ def test_is_valid_thai_id_accepts_valid_numbers(value):
 )
 def test_is_valid_thai_id_rejects_invalid_numbers(value):
     assert not is_valid_thai_id(value)
+
+
+def test_format_thai_date():
+    assert format_thai_date(datetime.date(2026, 9, 29)) == "29 กันยายน 2569"
+
+
+def test_format_thai_date_short():
+    assert format_thai_date(datetime.date(2026, 1, 5), short=True) == "5 ม.ค. 2569"
+
+
+def test_format_thai_date_thai_digits():
+    assert (
+        format_thai_date(datetime.date(2026, 12, 31), thai_digits=True)
+        == "๓๑ ธันวาคม ๒๕๖๙"
+    )
+
+
+def test_format_thai_date_accepts_datetime():
+    assert format_thai_date(datetime.datetime(2026, 4, 13, 8, 30)) == "13 เมษายน 2569"
