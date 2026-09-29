@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 - 2026-09-30
+
+### Added
+- `thai`: `number_to_thai_words`, `ce_to_be`, `be_to_ce`, `is_valid_thai_id`, `format_thai_date`
+- `text`: `camel_to_snake`, `snake_to_camel`
+- `collections`: `unique`, `group_by`
+- `units`: `parse_bytes`
+- CLI commands: `size`, `snake`, `camel`, `thai-words`, `thai-id`
+
 ## 0.2.0 - 2026-09-29
 
 ### Added
