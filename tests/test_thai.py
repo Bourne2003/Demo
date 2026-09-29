@@ -1,4 +1,6 @@
-from demo_utils.thai import from_thai_digits, to_thai_digits
+import pytest
+
+from demo_utils.thai import from_thai_digits, number_to_thai_words, to_thai_digits
 
 
 def test_to_thai_digits():
@@ -19,3 +21,25 @@ def test_from_thai_digits():
 
 def test_round_trip():
     assert from_thai_digits(to_thai_digits("0123456789")) == "0123456789"
+
+
+@pytest.mark.parametrize(
+    "number, expected",
+    [
+        (0, "ศูนย์"),
+        (1, "หนึ่ง"),
+        (10, "สิบ"),
+        (11, "สิบเอ็ด"),
+        (20, "ยี่สิบ"),
+        (21, "ยี่สิบเอ็ด"),
+        (101, "หนึ่งร้อยเอ็ด"),
+        (121, "หนึ่งร้อยยี่สิบเอ็ด"),
+        (2569, "สองพันห้าร้อยหกสิบเก้า"),
+        (1_000_000, "หนึ่งล้าน"),
+        (1_000_001, "หนึ่งล้านเอ็ด"),
+        (21_000_000, "ยี่สิบเอ็ดล้าน"),
+        (-5, "ลบห้า"),
+    ],
+)
+def test_number_to_thai_words(number, expected):
+    assert number_to_thai_words(number) == expected
