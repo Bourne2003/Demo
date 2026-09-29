@@ -86,3 +86,15 @@ def be_to_ce(year: int) -> int:
     2026
     """
     return year - BUDDHIST_ERA_OFFSET
+
+
+def is_valid_thai_id(value: str) -> bool:
+    """Validate a 13-digit Thai national ID number using its check digit.
+
+    Spaces and dashes are ignored, e.g. ``"1-2345-67890-12-1"``.
+    """
+    digits = value.replace("-", "").replace(" ", "")
+    if len(digits) != 13 or not digits.isascii() or not digits.isdigit():
+        return False
+    total = sum(int(digit) * (13 - index) for index, digit in enumerate(digits[:12]))
+    return (11 - total % 11) % 10 == int(digits[12])
