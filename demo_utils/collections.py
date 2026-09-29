@@ -1,7 +1,7 @@
 """Helpers for lists and other iterables."""
 
 from itertools import islice
-from typing import Any, Iterable, Iterator, List, TypeVar
+from typing import Any, Callable, Iterable, Iterator, List, Optional, TypeVar
 
 T = TypeVar("T")
 
@@ -34,4 +34,22 @@ def flatten(items: Iterable[Any]) -> Iterator[Any]:
         if isinstance(item, (list, tuple)):
             yield from flatten(item)
         else:
+            yield item
+
+
+def unique(
+    items: Iterable[T], key: Optional[Callable[[T], Any]] = None
+) -> Iterator[T]:
+    """Yield items in their original order, skipping duplicates.
+
+    ``key`` decides what counts as a duplicate; values it returns must be hashable.
+
+    >>> list(unique([3, 1, 3, 2, 1]))
+    [3, 1, 2]
+    """
+    seen = set()
+    for item in items:
+        marker = key(item) if key else item
+        if marker not in seen:
+            seen.add(marker)
             yield item
