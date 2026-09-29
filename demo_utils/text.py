@@ -48,3 +48,27 @@ def is_palindrome(value: str) -> bool:
     """
     letters = [char.casefold() for char in value if char.isalnum()]
     return letters == letters[::-1]
+
+
+def camel_to_snake(value: str) -> str:
+    """Convert ``camelCase`` or ``PascalCase`` to ``snake_case``.
+
+    >>> camel_to_snake("parseHTTPResponse")
+    'parse_http_response'
+    """
+    value = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", value)
+    value = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", value)
+    return value.lower()
+
+
+def snake_to_camel(value: str, upper_first: bool = False) -> str:
+    """Convert ``snake_case`` to ``camelCase`` (or ``PascalCase``).
+
+    >>> snake_to_camel("parse_http_response")
+    'parseHttpResponse'
+    """
+    words = [word for word in value.split("_") if word]
+    if not words:
+        return ""
+    head = words[0].capitalize() if upper_first else words[0].lower()
+    return head + "".join(word.capitalize() for word in words[1:])

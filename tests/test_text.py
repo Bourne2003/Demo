@@ -1,6 +1,13 @@
 import pytest
 
-from demo_utils.text import is_palindrome, slugify, truncate, word_count
+from demo_utils.text import (
+    camel_to_snake,
+    is_palindrome,
+    slugify,
+    snake_to_camel,
+    truncate,
+    word_count,
+)
 
 
 def test_slugify_basic():
@@ -62,3 +69,31 @@ def test_is_palindrome_true(value):
 @pytest.mark.parametrize("value", ["hello", "12345", "ab"])
 def test_is_palindrome_false(value):
     assert not is_palindrome(value)
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("camelCase", "camel_case"),
+        ("PascalCase", "pascal_case"),
+        ("parseHTTPResponse", "parse_http_response"),
+        ("version2Update", "version2_update"),
+        ("already_snake", "already_snake"),
+    ],
+)
+def test_camel_to_snake(value, expected):
+    assert camel_to_snake(value) == expected
+
+
+@pytest.mark.parametrize(
+    "value, upper_first, expected",
+    [
+        ("snake_case", False, "snakeCase"),
+        ("snake_case", True, "SnakeCase"),
+        ("__private_value__", False, "privateValue"),
+        ("single", False, "single"),
+        ("", False, ""),
+    ],
+)
+def test_snake_to_camel(value, upper_first, expected):
+    assert snake_to_camel(value, upper_first=upper_first) == expected
