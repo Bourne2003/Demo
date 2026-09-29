@@ -1,6 +1,6 @@
 import pytest
 
-from demo_utils.units import format_bytes
+from demo_utils.units import format_bytes, parse_duration
 
 
 @pytest.mark.parametrize(
@@ -26,3 +26,22 @@ def test_format_bytes_precision():
 def test_format_bytes_negative():
     with pytest.raises(ValueError):
         format_bytes(-1)
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("45s", 45),
+        ("1h30m", 5400),
+        ("2d", 172800),
+        ("1D 2H 3M 4S", 93784),
+    ],
+)
+def test_parse_duration(value, expected):
+    assert parse_duration(value) == expected
+
+
+@pytest.mark.parametrize("value", ["", "10", "5x", "1h-2m", "h"])
+def test_parse_duration_invalid(value):
+    with pytest.raises(ValueError):
+        parse_duration(value)
