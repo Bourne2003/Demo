@@ -1,4 +1,6 @@
-from demo_utils.text import slugify, word_count
+import pytest
+
+from demo_utils.text import slugify, truncate, word_count
 
 
 def test_slugify_basic():
@@ -27,3 +29,24 @@ def test_word_count_newlines_and_tabs():
 
 def test_word_count_empty():
     assert word_count("   ") == 0
+
+
+def test_truncate_short_text_unchanged():
+    assert truncate("Hi", 8) == "Hi"
+
+
+def test_truncate_adds_suffix():
+    assert truncate("Hello, World!", 8) == "Hello..."
+
+
+def test_truncate_custom_suffix():
+    assert truncate("Hello, World!", 6, suffix="…") == "Hello…"
+
+
+def test_truncate_length_shorter_than_suffix():
+    assert truncate("Hello", 2) == ".."
+
+
+def test_truncate_negative_length():
+    with pytest.raises(ValueError):
+        truncate("Hello", -1)

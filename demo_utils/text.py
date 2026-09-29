@@ -23,3 +23,18 @@ def word_count(value: str) -> int:
     3
     """
     return len(value.split())
+
+
+def truncate(value: str, length: int, suffix: str = "...") -> str:
+    """Shorten text to at most ``length`` characters, including ``suffix``.
+
+    >>> truncate("Hello, World!", 8)
+    'Hello...'
+    """
+    if length < 0:
+        raise ValueError("length must be non-negative")
+    if len(value) <= length:
+        return value
+    if length <= len(suffix):
+        return suffix[:length]
+    return value[: length - len(suffix)] + suffix
