@@ -29,7 +29,7 @@ _THAI_NUMBERS = ["ศูนย์", "หนึ่ง", "สอง", "สาม",
 _THAI_PLACES = ["", "สิบ", "ร้อย", "พัน", "หมื่น", "แสน"]
 
 
-def _read_below_million(number: int) -> str:
+def _read_below_million(number: int, after_higher: bool = False) -> str:
     digits = str(number)
     words = []
     for index, char in enumerate(digits):
@@ -41,7 +41,7 @@ def _read_below_million(number: int) -> str:
             words.append("สิบ")
         elif place == 1 and digit == 2:
             words.append("ยี่สิบ")
-        elif place == 0 and digit == 1 and len(digits) > 1:
+        elif place == 0 and digit == 1 and (len(digits) > 1 or after_higher):
             words.append("เอ็ด")
         else:
             words.append(_THAI_NUMBERS[digit] + _THAI_PLACES[place])
@@ -63,5 +63,5 @@ def number_to_thai_words(number: int) -> str:
     if millions:
         words = number_to_thai_words(millions) + "ล้าน"
     if rest:
-        words += _read_below_million(rest)
+        words += _read_below_million(rest, after_higher=bool(millions))
     return words
