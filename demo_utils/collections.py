@@ -1,9 +1,10 @@
 """Helpers for lists and other iterables."""
 
 from itertools import islice
-from typing import Any, Callable, Iterable, Iterator, List, Optional, TypeVar
+from typing import Any, Callable, Dict, Hashable, Iterable, Iterator, List, Optional, TypeVar
 
 T = TypeVar("T")
+K = TypeVar("K", bound=Hashable)
 
 
 def chunk(items: Iterable[T], size: int) -> Iterator[List[T]]:
@@ -53,3 +54,15 @@ def unique(
         if marker not in seen:
             seen.add(marker)
             yield item
+
+
+def group_by(items: Iterable[T], key: Callable[[T], K]) -> Dict[K, List[T]]:
+    """Group items into lists by ``key``, keeping first-seen key order.
+
+    >>> group_by(["apple", "avocado", "banana"], key=lambda word: word[0])
+    {'a': ['apple', 'avocado'], 'b': ['banana']}
+    """
+    groups: Dict[K, List[T]] = {}
+    for item in items:
+        groups.setdefault(key(item), []).append(item)
+    return groups

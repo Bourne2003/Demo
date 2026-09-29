@@ -1,6 +1,6 @@
 import pytest
 
-from demo_utils.collections import chunk, flatten, unique
+from demo_utils.collections import chunk, flatten, group_by, unique
 
 
 def test_chunk_uneven():
@@ -46,3 +46,18 @@ def test_unique_with_key():
 
 def test_unique_empty():
     assert list(unique([])) == []
+
+
+def test_group_by_first_letter():
+    assert group_by(["apple", "banana", "avocado"], key=lambda word: word[0]) == {
+        "a": ["apple", "avocado"],
+        "b": ["banana"],
+    }
+
+
+def test_group_by_keeps_key_order():
+    assert list(group_by([3, 1, 4, 2], key=lambda n: n % 2)) == [1, 0]
+
+
+def test_group_by_empty():
+    assert group_by([], key=len) == {}
