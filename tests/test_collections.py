@@ -1,6 +1,6 @@
 import pytest
 
-from demo_utils.collections import chunk, flatten
+from demo_utils.collections import chunk, flatten, unique
 
 
 def test_chunk_uneven():
@@ -34,3 +34,15 @@ def test_flatten_keeps_strings_whole():
 
 def test_flatten_empty_lists():
     assert list(flatten([[], [[]], ()])) == []
+
+
+def test_unique_keeps_first_occurrence_order():
+    assert list(unique([3, 1, 3, 2, 1])) == [3, 1, 2]
+
+
+def test_unique_with_key():
+    assert list(unique(["Apple", "apple", "Banana"], key=str.lower)) == ["Apple", "Banana"]
+
+
+def test_unique_empty():
+    assert list(unique([])) == []
