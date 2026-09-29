@@ -5,9 +5,14 @@ import sys
 from typing import List, Optional
 
 from demo_utils import __version__
-from demo_utils.text import slugify, word_count
-from demo_utils.thai import from_thai_digits, to_thai_digits
-from demo_utils.units import format_bytes, parse_duration
+from demo_utils.text import camel_to_snake, slugify, snake_to_camel, word_count
+from demo_utils.thai import (
+    from_thai_digits,
+    is_valid_thai_id,
+    number_to_thai_words,
+    to_thai_digits,
+)
+from demo_utils.units import format_bytes, parse_bytes, parse_duration
 
 COMMANDS = {
     "slugify": slugify,
@@ -16,6 +21,11 @@ COMMANDS = {
     "arabic-digits": from_thai_digits,
     "bytes": lambda value: format_bytes(int(value)),
     "seconds": parse_duration,
+    "size": parse_bytes,
+    "snake": camel_to_snake,
+    "camel": snake_to_camel,
+    "thai-words": lambda value: number_to_thai_words(int(value)),
+    "thai-id": lambda value: "valid" if is_valid_thai_id(value) else "invalid",
 }
 
 
