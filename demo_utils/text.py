@@ -14,3 +14,12 @@ def slugify(value: str, separator: str = "-") -> str:
     ascii_text = normalized.encode("ascii", "ignore").decode("ascii")
     words = re.findall(r"[a-z0-9]+", ascii_text.lower())
     return separator.join(words)
+
+
+def word_count(value: str) -> int:
+    """Count whitespace-separated words.
+
+    >>> word_count("one two  three")
+    3
+    """
+    return len(value.split())
