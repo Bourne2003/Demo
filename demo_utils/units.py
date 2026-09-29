@@ -23,6 +23,23 @@ def format_bytes(size: int, precision: int = 1) -> str:
     raise AssertionError("unreachable")
 
 
+_BYTES_PATTERN = re.compile(r"^\s*(\d+(?:\.\d+)?)\s*([kmgtp]?)i?b?\s*$", re.IGNORECASE)
+
+
+def parse_bytes(value: str) -> int:
+    """Parse a size such as ``"1.5 KB"`` into bytes (1024-based, like ``format_bytes``).
+
+    >>> parse_bytes("1.5 KB")
+    1536
+    """
+    match = _BYTES_PATTERN.match(value)
+    if not match:
+        raise ValueError(f"invalid size: {value!r}")
+    amount, prefix = match.groups()
+    power = "BKMGTP".index(prefix.upper() or "B")
+    return int(round(float(amount) * 1024**power))
+
+
 _DURATION_UNITS = {"d": 86400, "h": 3600, "m": 60, "s": 1}
 _DURATION_PART = re.compile(r"(\d+)([dhms])")
 
