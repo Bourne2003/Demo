@@ -1,7 +1,7 @@
 """Helpers for lists and other iterables."""
 
 from itertools import islice
-from typing import Iterable, Iterator, List, TypeVar
+from typing import Any, Iterable, Iterator, List, TypeVar
 
 T = TypeVar("T")
 
@@ -20,3 +20,18 @@ def chunk(items: Iterable[T], size: int) -> Iterator[List[T]]:
         if not batch:
             return
         yield batch
+
+
+def flatten(items: Iterable[Any]) -> Iterator[Any]:
+    """Recursively flatten nested lists and tuples.
+
+    Strings and bytes are treated as single values.
+
+    >>> list(flatten([1, [2, (3, [4])], "ab"]))
+    [1, 2, 3, 4, 'ab']
+    """
+    for item in items:
+        if isinstance(item, (list, tuple)):
+            yield from flatten(item)
+        else:
+            yield item

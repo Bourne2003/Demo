@@ -1,6 +1,6 @@
 import pytest
 
-from demo_utils.collections import chunk
+from demo_utils.collections import chunk, flatten
 
 
 def test_chunk_uneven():
@@ -22,3 +22,15 @@ def test_chunk_empty():
 def test_chunk_invalid_size():
     with pytest.raises(ValueError):
         list(chunk([1], 0))
+
+
+def test_flatten_nested():
+    assert list(flatten([1, [2, (3, [4])], 5])) == [1, 2, 3, 4, 5]
+
+
+def test_flatten_keeps_strings_whole():
+    assert list(flatten(["ab", ["cd"]])) == ["ab", "cd"]
+
+
+def test_flatten_empty_lists():
+    assert list(flatten([[], [[]], ()])) == []
