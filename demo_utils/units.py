@@ -77,3 +77,21 @@ def format_duration(seconds: int) -> str:
         if amount:
             parts.append(f"{amount}{unit}")
     return "".join(parts)
+
+
+def celsius_to_fahrenheit(celsius: float) -> float:
+    """Convert °C to °F.
+
+    >>> celsius_to_fahrenheit(100)
+    212.0
+    """
+    return celsius * 9 / 5 + 32
+
+
+def fahrenheit_to_celsius(fahrenheit: float) -> float:
+    """Convert °F to °C.
+
+    >>> fahrenheit_to_celsius(212)
+    100.0
+    """
+    return (fahrenheit - 32) * 5 / 9

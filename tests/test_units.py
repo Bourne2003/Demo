@@ -1,6 +1,13 @@
 import pytest
 
-from demo_utils.units import format_bytes, format_duration, parse_bytes, parse_duration
+from demo_utils.units import (
+    celsius_to_fahrenheit,
+    fahrenheit_to_celsius,
+    format_bytes,
+    format_duration,
+    parse_bytes,
+    parse_duration,
+)
 
 
 @pytest.mark.parametrize(
@@ -90,3 +97,11 @@ def test_format_duration_round_trips_parse_duration(seconds):
 def test_format_duration_negative():
     with pytest.raises(ValueError):
         format_duration(-1)
+
+
+@pytest.mark.parametrize(
+    "celsius, fahrenheit", [(0, 32), (100, 212), (-40, -40), (37, 98.6)]
+)
+def test_temperature_conversions(celsius, fahrenheit):
+    assert celsius_to_fahrenheit(celsius) == pytest.approx(fahrenheit)
+    assert fahrenheit_to_celsius(fahrenheit) == pytest.approx(celsius)
