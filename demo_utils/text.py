@@ -1,5 +1,6 @@
 """Text helpers."""
 
+import html
 import re
 import unicodedata
 from collections import Counter
@@ -149,3 +150,20 @@ def char_frequency(
         text = "".join(char for char in text if not char.isspace())
     counts = Counter(text).most_common()
     return counts[:top] if top else counts
+
+
+_HTML_DROP_BLOCKS = re.compile(r"<(script|style)\b[^>]*>.*?</\1\s*>", re.IGNORECASE | re.DOTALL)
+_HTML_TAG = re.compile(r"<[^>]+>")
+
+
+def strip_html_tags(value: str) -> str:
+    """Convert simple HTML to plain text: drop tags, scripts and styles, unescape entities.
+
+    This is for display text, not for sanitizing untrusted HTML.
+
+    >>> strip_html_tags("<p>Fish &amp; <b>chips</b></p>")
+    'Fish & chips'
+    """
+    text = _HTML_DROP_BLOCKS.sub(" ", value)
+    text = _HTML_TAG.sub(" ", text)
+    return normalize_whitespace(html.unescape(text))
