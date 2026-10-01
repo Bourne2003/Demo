@@ -2,6 +2,8 @@
 
 import re
 import unicodedata
+from collections import Counter
+from typing import List, Tuple
 
 
 def slugify(value: str, separator: str = "-") -> str:
@@ -130,3 +132,20 @@ def similarity(a: str, b: str) -> float:
     if longest == 0:
         return 1.0
     return 1 - levenshtein(a, b) / longest
+
+
+def char_frequency(
+    value: str, top: int = 0, ignore_case: bool = True, ignore_space: bool = True
+) -> List[Tuple[str, int]]:
+    """Count characters, most common first (ties keep first-seen order).
+
+    ``top`` limits the result; 0 returns every character.
+
+    >>> char_frequency("Hello", top=2)
+    [('l', 2), ('h', 1)]
+    """
+    text = value.lower() if ignore_case else value
+    if ignore_space:
+        text = "".join(char for char in text if not char.isspace())
+    counts = Counter(text).most_common()
+    return counts[:top] if top else counts

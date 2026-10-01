@@ -2,6 +2,7 @@ import pytest
 
 from demo_utils.text import (
     camel_to_snake,
+    char_frequency,
     is_palindrome,
     levenshtein,
     mask,
@@ -170,3 +171,23 @@ def test_similarity_partial():
 
 def test_similarity_empty_strings():
     assert similarity("", "") == 1.0
+
+
+def test_char_frequency_top():
+    assert char_frequency("Hello", top=2) == [("l", 2), ("h", 1)]
+
+
+def test_char_frequency_all_ignores_spaces():
+    assert char_frequency("a b a") == [("a", 2), ("b", 1)]
+
+
+def test_char_frequency_case_sensitive():
+    assert char_frequency("Aa", ignore_case=False) == [("A", 1), ("a", 1)]
+
+
+def test_char_frequency_keep_spaces():
+    assert char_frequency("a  a", ignore_space=False) == [("a", 2), (" ", 2)]
+
+
+def test_char_frequency_empty():
+    assert char_frequency("") == []
