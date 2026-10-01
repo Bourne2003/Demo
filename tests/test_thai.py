@@ -11,6 +11,7 @@ from demo_utils.thai import (
     from_thai_digits,
     is_valid_thai_id,
     number_to_thai_words,
+    parse_thai_date,
     remove_thai_tone_marks,
     thai_ratio,
     to_thai_digits,
@@ -171,3 +172,28 @@ def test_format_thai_date_weekday_short_thai_digits():
         format_thai_date(datetime.date(2026, 10, 4), short=True, thai_digits=True, weekday=True)
         == "วันอาทิตย์ที่ ๔ ต.ค. ๒๕๖๙"
     )
+
+
+@pytest.mark.parametrize(
+    "value",
+    ["29 กันยายน 2569", "29 ก.ย. 2569", "๒๙ กันยายน ๒๕๖๙", "วันอังคารที่ 29 กันยายน 2569"],
+)
+def test_parse_thai_date(value):
+    assert parse_thai_date(value) == datetime.date(2026, 9, 29)
+
+
+@pytest.mark.parametrize(
+    "options",
+    [{}, {"short": True}, {"thai_digits": True}, {"weekday": True, "thai_digits": True}],
+)
+def test_parse_thai_date_round_trips_format_thai_date(options):
+    date = datetime.date(2027, 2, 14)
+    assert parse_thai_date(format_thai_date(date, **options)) == date
+
+
+@pytest.mark.parametrize(
+    "value", ["", "29 กันยายน", "29 September 2569", "xx กันยายน 2569", "30 กุมภาพันธ์ 2569"]
+)
+def test_parse_thai_date_invalid(value):
+    with pytest.raises(ValueError):
+        parse_thai_date(value)
