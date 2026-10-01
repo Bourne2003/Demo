@@ -81,3 +81,15 @@ def normalize_whitespace(value: str) -> str:
     'hello world'
     """
     return " ".join(value.split())
+
+
+def mask(value: str, visible: int = 4, char: str = "*") -> str:
+    """Hide all but the last ``visible`` characters, e.g. for card or phone numbers.
+
+    >>> mask("0812345678")
+    '******5678'
+    """
+    if visible < 0:
+        raise ValueError("visible must be non-negative")
+    hidden = max(len(value) - visible, 0)
+    return char * hidden + value[hidden:]

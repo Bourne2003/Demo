@@ -3,6 +3,7 @@ import pytest
 from demo_utils.text import (
     camel_to_snake,
     is_palindrome,
+    mask,
     normalize_whitespace,
     slugify,
     snake_to_camel,
@@ -111,3 +112,24 @@ def test_snake_to_camel(value, upper_first, expected):
 )
 def test_normalize_whitespace(value, expected):
     assert normalize_whitespace(value) == expected
+
+
+def test_mask_default():
+    assert mask("0812345678") == "******5678"
+
+
+def test_mask_custom_visible_and_char():
+    assert mask("secret", visible=2, char="#") == "####et"
+
+
+def test_mask_short_value_unchanged():
+    assert mask("abc") == "abc"
+
+
+def test_mask_zero_visible():
+    assert mask("abc", visible=0) == "***"
+
+
+def test_mask_negative_visible():
+    with pytest.raises(ValueError):
+        mask("abc", visible=-1)
