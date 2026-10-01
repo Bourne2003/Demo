@@ -140,3 +140,27 @@ def baht_text(amount: float) -> str:
     if baht == 0:
         return prefix + satang_words
     return f"{prefix}{number_to_thai_words(baht)}บาท{satang_words}"
+
+
+def _is_thai_char(char: str) -> bool:
+    return "฀" <= char <= "๿"
+
+
+def contains_thai(value: str) -> bool:
+    """Return ``True`` if the text contains any Thai character.
+
+    >>> contains_thai("hello สวัสดี")
+    True
+    """
+    return any(_is_thai_char(char) for char in value)
+
+
+def thai_ratio(value: str) -> float:
+    """Return the share of letters in the text that are Thai (0.0 to 1.0).
+
+    Spaces, digits and punctuation are ignored.
+    """
+    letters = [char for char in value if char.isalpha() or _is_thai_char(char)]
+    if not letters:
+        return 0.0
+    return sum(_is_thai_char(char) for char in letters) / len(letters)

@@ -6,10 +6,12 @@ from demo_utils.thai import (
     baht_text,
     be_to_ce,
     ce_to_be,
+    contains_thai,
     format_thai_date,
     from_thai_digits,
     is_valid_thai_id,
     number_to_thai_words,
+    thai_ratio,
     to_thai_digits,
 )
 
@@ -120,3 +122,23 @@ def test_format_thai_date_accepts_datetime():
 )
 def test_baht_text(amount, expected):
     assert baht_text(amount) == expected
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [("สวัสดี", True), ("hello สวัสดี", True), ("hello", False), ("๑๒๓", True), ("", False)],
+)
+def test_contains_thai(value, expected):
+    assert contains_thai(value) is expected
+
+
+def test_thai_ratio_all_thai():
+    assert thai_ratio("สวัสดี") == 1.0
+
+
+def test_thai_ratio_mixed():
+    assert thai_ratio("ab กข") == 0.5
+
+
+def test_thai_ratio_ignores_digits_and_punctuation():
+    assert thai_ratio("123 !!!") == 0.0
