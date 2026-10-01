@@ -112,16 +112,26 @@ THAI_MONTHS_SHORT = [
 ]
 
 
+THAI_WEEKDAYS = ["จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์", "อาทิตย์"]
+
+
 def format_thai_date(
-    value: datetime.date, short: bool = False, thai_digits: bool = False
+    value: datetime.date,
+    short: bool = False,
+    thai_digits: bool = False,
+    weekday: bool = False,
 ) -> str:
     """Format a date in Thai with a Buddhist Era year.
 
     >>> format_thai_date(datetime.date(2026, 9, 29))
     '29 กันยายน 2569'
+    >>> format_thai_date(datetime.date(2026, 9, 29), weekday=True)
+    'วันอังคารที่ 29 กันยายน 2569'
     """
     months = THAI_MONTHS_SHORT if short else THAI_MONTHS
     text = f"{value.day} {months[value.month - 1]} {ce_to_be(value.year)}"
+    if weekday:
+        text = f"วัน{THAI_WEEKDAYS[value.weekday()]}ที่ {text}"
     return to_thai_digits(text) if thai_digits else text
 
 
