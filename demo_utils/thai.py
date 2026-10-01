@@ -1,6 +1,8 @@
 """Thai language helpers."""
 
 import datetime
+import re
+from typing import List
 
 _ARABIC = "0123456789"
 _THAI = "๐๑๒๓๔๕๖๗๘๙"
@@ -247,3 +249,16 @@ def format_thai_mobile(value: str, international: bool = False) -> str:
     if international:
         return f"+66 {digits[1:3]} {digits[3:6]} {digits[6:]}"
     return f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
+
+
+_NUMBER_PATTERN = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
+
+
+def extract_numbers(value: str) -> List[float]:
+    """Find numbers in text, accepting Thai digits and thousands separators.
+
+    >>> extract_numbers("ราคา ๑,๒๕๐ บาท ลด 10.5%")
+    [1250.0, 10.5]
+    """
+    text = from_thai_digits(value)
+    return [float(match.replace(",", "")) for match in _NUMBER_PATTERN.findall(text)]
