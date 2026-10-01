@@ -3,6 +3,7 @@ import datetime
 import pytest
 
 from demo_utils.thai import (
+    baht_text,
     be_to_ce,
     ce_to_be,
     format_thai_date,
@@ -104,3 +105,18 @@ def test_format_thai_date_thai_digits():
 
 def test_format_thai_date_accepts_datetime():
     assert format_thai_date(datetime.datetime(2026, 4, 13, 8, 30)) == "13 เมษายน 2569"
+
+
+@pytest.mark.parametrize(
+    "amount, expected",
+    [
+        (0, "ศูนย์บาทถ้วน"),
+        (1, "หนึ่งบาทถ้วน"),
+        (121.5, "หนึ่งร้อยยี่สิบเอ็ดบาทห้าสิบสตางค์"),
+        (0.25, "ยี่สิบห้าสตางค์"),
+        (1_000_000.01, "หนึ่งล้านบาทหนึ่งสตางค์"),
+        (-20, "ลบยี่สิบบาทถ้วน"),
+    ],
+)
+def test_baht_text(amount, expected):
+    assert baht_text(amount) == expected

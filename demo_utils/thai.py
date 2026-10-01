@@ -123,3 +123,20 @@ def format_thai_date(
     months = THAI_MONTHS_SHORT if short else THAI_MONTHS
     text = f"{value.day} {months[value.month - 1]} {ce_to_be(value.year)}"
     return to_thai_digits(text) if thai_digits else text
+
+
+def baht_text(amount: float) -> str:
+    """Read an amount of money in Thai baht and satang.
+
+    >>> baht_text(121.5)
+    'หนึ่งร้อยยี่สิบเอ็ดบาทห้าสิบสตางค์'
+    """
+    satang_total = round(abs(amount) * 100)
+    baht, satang = divmod(satang_total, 100)
+    prefix = "ลบ" if amount < 0 and satang_total else ""
+    if satang == 0:
+        return f"{prefix}{number_to_thai_words(baht)}บาทถ้วน"
+    satang_words = number_to_thai_words(satang) + "สตางค์"
+    if baht == 0:
+        return prefix + satang_words
+    return f"{prefix}{number_to_thai_words(baht)}บาท{satang_words}"
