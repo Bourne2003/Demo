@@ -11,6 +11,7 @@ from demo_utils.thai import (
     from_thai_digits,
     is_valid_thai_id,
     number_to_thai_words,
+    remove_thai_tone_marks,
     thai_ratio,
     to_thai_digits,
 )
@@ -142,3 +143,17 @@ def test_thai_ratio_mixed():
 
 def test_thai_ratio_ignores_digits_and_punctuation():
     assert thai_ratio("123 !!!") == 0.0
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("ก่อน", "กอน"),
+        ("น้ำ", "นำ"),
+        ("โต๊ะ", "โตะ"),
+        ("จ๋า", "จา"),
+        ("hello", "hello"),
+    ],
+)
+def test_remove_thai_tone_marks(value, expected):
+    assert remove_thai_tone_marks(value) == expected
