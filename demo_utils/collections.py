@@ -111,3 +111,19 @@ def sliding_window(items: Iterable[T], size: int) -> Iterator[Tuple[T, ...]]:
     for item in iterator:
         window.append(item)
         yield tuple(window)
+
+
+def first(
+    items: Iterable[T],
+    predicate: Optional[Callable[[T], bool]] = None,
+    default: Any = None,
+) -> Any:
+    """Return the first item (matching ``predicate`` if given), else ``default``.
+
+    >>> first([1, 4, 6], lambda n: n % 2 == 0)
+    4
+    """
+    for item in items:
+        if predicate is None or predicate(item):
+            return item
+    return default
