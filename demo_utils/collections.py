@@ -127,3 +127,21 @@ def first(
         if predicate is None or predicate(item):
             return item
     return default
+
+
+def deep_merge(base: Dict[Any, Any], override: Dict[Any, Any]) -> Dict[Any, Any]:
+    """Recursively merge ``override`` into a copy of ``base``.
+
+    Nested dicts are merged; any other value in ``override`` replaces the one
+    in ``base``. Neither input is modified.
+
+    >>> deep_merge({"db": {"host": "a", "port": 1}}, {"db": {"port": 2}})
+    {'db': {'host': 'a', 'port': 2}}
+    """
+    merged = dict(base)
+    for key, value in override.items():
+        if isinstance(merged.get(key), dict) and isinstance(value, dict):
+            merged[key] = deep_merge(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
