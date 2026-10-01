@@ -10,6 +10,7 @@ from demo_utils.text import (
     similarity,
     slugify,
     snake_to_camel,
+    strip_html_tags,
     truncate,
     word_count,
 )
@@ -191,3 +192,18 @@ def test_char_frequency_keep_spaces():
 
 def test_char_frequency_empty():
     assert char_frequency("") == []
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("<p>Fish &amp; <b>chips</b></p>", "Fish & chips"),
+        ("<ul><li>one</li><li>two</li></ul>", "one two"),
+        ("<script>alert(1)</script>Hello", "Hello"),
+        ("<STYLE type='text/css'>p{}</STYLE>Hi", "Hi"),
+        ("no tags", "no tags"),
+        ("สวัสดี&nbsp;<br/>ครับ", "สวัสดี ครับ"),
+    ],
+)
+def test_strip_html_tags(value, expected):
+    assert strip_html_tags(value) == expected
