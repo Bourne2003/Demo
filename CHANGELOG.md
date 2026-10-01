@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0 - 2026-10-01
+
+### Added
+- `thai`: `baht_text`, `contains_thai`, `thai_ratio`, `remove_thai_tone_marks`, `parse_thai_date`, `is_valid_thai_mobile`, `format_thai_mobile`, `extract_numbers`
+- `thai`: `weekday=True` option for `format_thai_date`
+- `text`: `normalize_whitespace`, `mask`, `levenshtein`, `similarity`, `char_frequency`, `strip_html_tags`
+- `collections`: `partition`, `sliding_window`, `first`, `deep_merge`
+- `units`: `format_duration`, `format_number`, `celsius_to_fahrenheit`, `fahrenheit_to_celsius`
+- CLI commands: `baht`, `mobile`, `thai-date`, `no-tones`, `duration`, `squeeze`, `strip-html`
+
 ## 0.3.0 - 2026-09-30
 
 ### Added
