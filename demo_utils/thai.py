@@ -233,3 +233,17 @@ def is_valid_thai_mobile(value: str) -> bool:
     """
     digits = _phone_digits(value)
     return len(digits) == 10 and digits[:2] in ("06", "08", "09")
+
+
+def format_thai_mobile(value: str, international: bool = False) -> str:
+    """Format a Thai mobile number as ``081-234-5678`` (or ``+66 81 234 5678``).
+
+    >>> format_thai_mobile("0812345678")
+    '081-234-5678'
+    """
+    if not is_valid_thai_mobile(value):
+        raise ValueError(f"invalid Thai mobile number: {value!r}")
+    digits = _phone_digits(value)
+    if international:
+        return f"+66 {digits[1:3]} {digits[3:6]} {digits[6:]}"
+    return f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"

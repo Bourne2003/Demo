@@ -8,6 +8,7 @@ from demo_utils.thai import (
     ce_to_be,
     contains_thai,
     format_thai_date,
+    format_thai_mobile,
     from_thai_digits,
     is_valid_thai_mobile,
     is_valid_thai_id,
@@ -213,3 +214,17 @@ def test_is_valid_thai_mobile_accepts(value):
 )
 def test_is_valid_thai_mobile_rejects(value):
     assert not is_valid_thai_mobile(value)
+
+
+@pytest.mark.parametrize("value", ["0812345678", "+66 81 234 5678", "081 234 5678"])
+def test_format_thai_mobile(value):
+    assert format_thai_mobile(value) == "081-234-5678"
+
+
+def test_format_thai_mobile_international():
+    assert format_thai_mobile("0912345678", international=True) == "+66 91 234 5678"
+
+
+def test_format_thai_mobile_invalid():
+    with pytest.raises(ValueError):
+        format_thai_mobile("021234567")
