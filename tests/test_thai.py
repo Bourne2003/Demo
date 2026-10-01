@@ -7,6 +7,7 @@ from demo_utils.thai import (
     be_to_ce,
     ce_to_be,
     contains_thai,
+    extract_numbers,
     format_thai_date,
     format_thai_mobile,
     from_thai_digits,
@@ -228,3 +229,16 @@ def test_format_thai_mobile_international():
 def test_format_thai_mobile_invalid():
     with pytest.raises(ValueError):
         format_thai_mobile("021234567")
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("ราคา ๑,๒๕๐ บาท ลด 10.5%", [1250.0, 10.5]),
+        ("อุณหภูมิ -3 ถึง 12 องศา", [-3.0, 12.0]),
+        ("1,000,000", [1000000.0]),
+        ("ไม่มีตัวเลข", []),
+    ],
+)
+def test_extract_numbers(value, expected):
+    assert extract_numbers(value) == expected
