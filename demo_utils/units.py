@@ -59,3 +59,21 @@ def parse_duration(value: str) -> int:
         int(amount) * _DURATION_UNITS[unit]
         for amount, unit in _DURATION_PART.findall(text)
     )
+
+
+def format_duration(seconds: int) -> str:
+    """Format seconds as a compact duration such as ``"1h30m"`` (inverse of ``parse_duration``).
+
+    >>> format_duration(5400)
+    '1h30m'
+    """
+    if seconds < 0:
+        raise ValueError("seconds must be non-negative")
+    if seconds == 0:
+        return "0s"
+    parts = []
+    for unit, size in _DURATION_UNITS.items():
+        amount, seconds = divmod(seconds, size)
+        if amount:
+            parts.append(f"{amount}{unit}")
+    return "".join(parts)
