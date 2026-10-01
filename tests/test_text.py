@@ -6,6 +6,7 @@ from demo_utils.text import (
     levenshtein,
     mask,
     normalize_whitespace,
+    similarity,
     slugify,
     snake_to_camel,
     truncate,
@@ -153,3 +154,19 @@ def test_levenshtein(a, b, expected):
 
 def test_levenshtein_is_symmetric():
     assert levenshtein("abcdef", "azced") == levenshtein("azced", "abcdef")
+
+
+def test_similarity_identical():
+    assert similarity("hello", "hello") == 1.0
+
+
+def test_similarity_completely_different():
+    assert similarity("abc", "xyz") == 0.0
+
+
+def test_similarity_partial():
+    assert similarity("kitten", "sitting") == pytest.approx(4 / 7)
+
+
+def test_similarity_empty_strings():
+    assert similarity("", "") == 1.0

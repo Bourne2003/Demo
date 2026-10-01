@@ -116,3 +116,17 @@ def levenshtein(a: str, b: str) -> int:
             )
         previous = current
     return previous[-1]
+
+
+def similarity(a: str, b: str) -> float:
+    """Return a similarity score from 0.0 (different) to 1.0 (identical).
+
+    Based on ``levenshtein`` normalized by the longer string's length.
+
+    >>> similarity("kitten", "sitting")
+    0.5714285714285714
+    """
+    longest = max(len(a), len(b))
+    if longest == 0:
+        return 1.0
+    return 1 - levenshtein(a, b) / longest
