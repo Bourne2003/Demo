@@ -3,6 +3,7 @@ import pytest
 from demo_utils.text import (
     camel_to_snake,
     is_palindrome,
+    normalize_whitespace,
     slugify,
     snake_to_camel,
     truncate,
@@ -97,3 +98,16 @@ def test_camel_to_snake(value, expected):
 )
 def test_snake_to_camel(value, upper_first, expected):
     assert snake_to_camel(value, upper_first=upper_first) == expected
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("  hello \t\n world  ", "hello world"),
+        ("a\u00a0\u00a0b", "a b"),
+        ("single", "single"),
+        ("   ", ""),
+    ],
+)
+def test_normalize_whitespace(value, expected):
+    assert normalize_whitespace(value) == expected

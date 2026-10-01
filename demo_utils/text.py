@@ -72,3 +72,12 @@ def snake_to_camel(value: str, upper_first: bool = False) -> str:
         return ""
     head = words[0].capitalize() if upper_first else words[0].lower()
     return head + "".join(word.capitalize() for word in words[1:])
+
+
+def normalize_whitespace(value: str) -> str:
+    """Collapse runs of whitespace (including tabs, newlines and NBSP) to one space.
+
+    >>> normalize_whitespace("  hello \\t\\n world  ")
+    'hello world'
+    """
+    return " ".join(value.split())
