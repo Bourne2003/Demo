@@ -2,6 +2,7 @@ import pytest
 
 from demo_utils.collections import (
     chunk,
+    deep_merge,
     first,
     flatten,
     group_by,
@@ -126,3 +127,25 @@ def test_first_stops_early():
         raise AssertionError("should not be consumed")
 
     assert first(numbers()) == 1
+
+
+def test_deep_merge_nested():
+    base = {"db": {"host": "a", "port": 1}, "debug": False}
+    override = {"db": {"port": 2}, "debug": True}
+    assert deep_merge(base, override) == {"db": {"host": "a", "port": 2}, "debug": True}
+
+
+def test_deep_merge_replaces_non_dict_values():
+    assert deep_merge({"a": {"b": 1}}, {"a": [1, 2]}) == {"a": [1, 2]}
+
+
+def test_deep_merge_adds_new_keys():
+    assert deep_merge({"a": 1}, {"b": {"c": 2}}) == {"a": 1, "b": {"c": 2}}
+
+
+def test_deep_merge_does_not_modify_inputs():
+    base = {"a": {"b": 1}}
+    override = {"a": {"c": 2}}
+    deep_merge(base, override)
+    assert base == {"a": {"b": 1}}
+    assert override == {"a": {"c": 2}}
