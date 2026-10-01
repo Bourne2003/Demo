@@ -1,6 +1,13 @@
 import pytest
 
-from demo_utils.collections import chunk, flatten, group_by, partition, unique
+from demo_utils.collections import (
+    chunk,
+    flatten,
+    group_by,
+    partition,
+    sliding_window,
+    unique,
+)
 
 
 def test_chunk_uneven():
@@ -73,3 +80,24 @@ def test_partition_all_match():
 
 def test_partition_empty():
     assert partition([], bool) == ([], [])
+
+
+def test_sliding_window_pairs():
+    assert list(sliding_window([1, 2, 3, 4], 2)) == [(1, 2), (2, 3), (3, 4)]
+
+
+def test_sliding_window_size_equals_length():
+    assert list(sliding_window("abc", 3)) == [("a", "b", "c")]
+
+
+def test_sliding_window_too_short():
+    assert list(sliding_window([1, 2], 3)) == []
+
+
+def test_sliding_window_generator_input():
+    assert list(sliding_window((n for n in range(4)), 3)) == [(0, 1, 2), (1, 2, 3)]
+
+
+def test_sliding_window_invalid_size():
+    with pytest.raises(ValueError):
+        list(sliding_window([1], 0))
