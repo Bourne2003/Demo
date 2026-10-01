@@ -1,7 +1,18 @@
 """Helpers for lists and other iterables."""
 
 from itertools import islice
-from typing import Any, Callable, Dict, Hashable, Iterable, Iterator, List, Optional, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Hashable,
+    Iterable,
+    Iterator,
+    List,
+    Optional,
+    Tuple,
+    TypeVar,
+)
 
 T = TypeVar("T")
 K = TypeVar("K", bound=Hashable)
@@ -66,3 +77,18 @@ def group_by(items: Iterable[T], key: Callable[[T], K]) -> Dict[K, List[T]]:
     for item in items:
         groups.setdefault(key(item), []).append(item)
     return groups
+
+
+def partition(
+    items: Iterable[T], predicate: Callable[[T], bool]
+) -> Tuple[List[T], List[T]]:
+    """Split items into ``(matching, not_matching)`` lists, keeping order.
+
+    >>> partition(range(6), lambda n: n % 2 == 0)
+    ([0, 2, 4], [1, 3, 5])
+    """
+    matching: List[T] = []
+    rest: List[T] = []
+    for item in items:
+        (matching if predicate(item) else rest).append(item)
+    return matching, rest
