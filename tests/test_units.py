@@ -1,6 +1,6 @@
 import pytest
 
-from demo_utils.units import format_bytes, parse_bytes, parse_duration
+from demo_utils.units import format_bytes, format_duration, parse_bytes, parse_duration
 
 
 @pytest.mark.parametrize(
@@ -72,3 +72,21 @@ def test_parse_bytes_round_trips_format_bytes(size):
 def test_parse_bytes_invalid(value):
     with pytest.raises(ValueError):
         parse_bytes(value)
+
+
+@pytest.mark.parametrize(
+    "seconds, expected",
+    [(0, "0s"), (45, "45s"), (5400, "1h30m"), (86400, "1d"), (93784, "1d2h3m4s")],
+)
+def test_format_duration(seconds, expected):
+    assert format_duration(seconds) == expected
+
+
+@pytest.mark.parametrize("seconds", [1, 59, 61, 3600, 90061, 10**6])
+def test_format_duration_round_trips_parse_duration(seconds):
+    assert parse_duration(format_duration(seconds)) == seconds
+
+
+def test_format_duration_negative():
+    with pytest.raises(ValueError):
+        format_duration(-1)
