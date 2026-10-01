@@ -1,5 +1,6 @@
 """Helpers for lists and other iterables."""
 
+from collections import deque
 from itertools import islice
 from typing import (
     Any,
@@ -92,3 +93,21 @@ def partition(
     for item in items:
         (matching if predicate(item) else rest).append(item)
     return matching, rest
+
+
+def sliding_window(items: Iterable[T], size: int) -> Iterator[Tuple[T, ...]]:
+    """Yield overlapping tuples of ``size`` consecutive items.
+
+    >>> list(sliding_window([1, 2, 3, 4], 2))
+    [(1, 2), (2, 3), (3, 4)]
+    """
+    if size < 1:
+        raise ValueError("size must be at least 1")
+    iterator = iter(items)
+    window = deque(islice(iterator, size), maxlen=size)
+    if len(window) < size:
+        return
+    yield tuple(window)
+    for item in iterator:
+        window.append(item)
+        yield tuple(window)
