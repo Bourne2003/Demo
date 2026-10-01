@@ -164,3 +164,17 @@ def thai_ratio(value: str) -> float:
     if not letters:
         return 0.0
     return sum(_is_thai_char(char) for char in letters) / len(letters)
+
+
+_THAI_TONE_MARKS = "่้๊๋"  # ่ ้ ๊ ๋
+
+
+def remove_thai_tone_marks(value: str) -> str:
+    """Remove Thai tone marks (ไม้เอก, ไม้โท, ไม้ตรี, ไม้จัตวา).
+
+    Useful for loose matching of Thai text typed without tone marks.
+
+    >>> remove_thai_tone_marks("ก่อน")
+    'กอน'
+    """
+    return value.translate({ord(mark): None for mark in _THAI_TONE_MARKS})
