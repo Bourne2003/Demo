@@ -21,6 +21,13 @@ from demo_utils.cli import main
         (["thai-words", "2569"], "สองพันห้าร้อยหกสิบเก้า"),
         (["thai-id", "1-2345-67890-12-1"], "valid"),
         (["thai-id", "1234567890122"], "invalid"),
+        (["baht", "1,250.50"], "หนึ่งพันสองร้อยห้าสิบบาทห้าสิบสตางค์"),
+        (["mobile", "+66 81 234 5678"], "081-234-5678"),
+        (["thai-date", "29", "กันยายน", "2569"], "2026-09-29"),
+        (["no-tones", "ก่อน"], "กอน"),
+        (["duration", "5400"], "1h30m"),
+        (["squeeze", "a   b"], "a b"),
+        (["strip-html", "<b>hi</b>"], "hi"),
     ],
 )
 def test_commands(argv, expected, capsys):
@@ -36,6 +43,11 @@ def test_invalid_input_returns_error(capsys):
 def test_non_numeric_thai_words_returns_error(capsys):
     assert main(["thai-words", "many"]) == 1
     assert "error:" in capsys.readouterr().err
+
+
+def test_invalid_mobile_returns_error(capsys):
+    assert main(["mobile", "021234567"]) == 1
+    assert "invalid Thai mobile number" in capsys.readouterr().err
 
 
 def test_unknown_command_exits():

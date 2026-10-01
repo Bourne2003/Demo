@@ -5,14 +5,25 @@ import sys
 from typing import List, Optional
 
 from demo_utils import __version__
-from demo_utils.text import camel_to_snake, slugify, snake_to_camel, word_count
+from demo_utils.text import (
+    camel_to_snake,
+    normalize_whitespace,
+    slugify,
+    snake_to_camel,
+    strip_html_tags,
+    word_count,
+)
 from demo_utils.thai import (
+    baht_text,
+    format_thai_mobile,
     from_thai_digits,
     is_valid_thai_id,
     number_to_thai_words,
+    parse_thai_date,
+    remove_thai_tone_marks,
     to_thai_digits,
 )
-from demo_utils.units import format_bytes, parse_bytes, parse_duration
+from demo_utils.units import format_bytes, format_duration, parse_bytes, parse_duration
 
 COMMANDS = {
     "slugify": slugify,
@@ -26,6 +37,13 @@ COMMANDS = {
     "camel": snake_to_camel,
     "thai-words": lambda value: number_to_thai_words(int(value)),
     "thai-id": lambda value: "valid" if is_valid_thai_id(value) else "invalid",
+    "baht": lambda value: baht_text(float(value.replace(",", ""))),
+    "mobile": format_thai_mobile,
+    "thai-date": lambda value: parse_thai_date(value).isoformat(),
+    "no-tones": remove_thai_tone_marks,
+    "duration": lambda value: format_duration(int(value)),
+    "squeeze": normalize_whitespace,
+    "strip-html": strip_html_tags,
 }
 
 
