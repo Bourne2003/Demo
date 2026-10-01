@@ -2,6 +2,7 @@ import pytest
 
 from demo_utils.collections import (
     chunk,
+    first,
     flatten,
     group_by,
     partition,
@@ -101,3 +102,27 @@ def test_sliding_window_generator_input():
 def test_sliding_window_invalid_size():
     with pytest.raises(ValueError):
         list(sliding_window([1], 0))
+
+
+def test_first_without_predicate():
+    assert first([3, 4]) == 3
+
+
+def test_first_with_predicate():
+    assert first([1, 4, 6], lambda n: n % 2 == 0) == 4
+
+
+def test_first_default_when_empty():
+    assert first([], default="none") == "none"
+
+
+def test_first_default_when_no_match():
+    assert first([1, 3], lambda n: n > 5, default=0) == 0
+
+
+def test_first_stops_early():
+    def numbers():
+        yield 1
+        raise AssertionError("should not be consumed")
+
+    assert first(numbers()) == 1
