@@ -1,6 +1,6 @@
 import pytest
 
-from demo_utils.collections import chunk, flatten, group_by, unique
+from demo_utils.collections import chunk, flatten, group_by, partition, unique
 
 
 def test_chunk_uneven():
@@ -61,3 +61,15 @@ def test_group_by_keeps_key_order():
 
 def test_group_by_empty():
     assert group_by([], key=len) == {}
+
+
+def test_partition_even_odd():
+    assert partition(range(6), lambda n: n % 2 == 0) == ([0, 2, 4], [1, 3, 5])
+
+
+def test_partition_all_match():
+    assert partition("abc", str.isalpha) == (["a", "b", "c"], [])
+
+
+def test_partition_empty():
+    assert partition([], bool) == ([], [])
