@@ -188,3 +188,29 @@ def remove_thai_tone_marks(value: str) -> str:
     'กอน'
     """
     return value.translate({ord(mark): None for mark in _THAI_TONE_MARKS})
+
+
+def parse_thai_date(value: str) -> datetime.date:
+    """Parse a Thai date such as ``"29 กันยายน 2569"`` (Buddhist Era year).
+
+    Accepts full or abbreviated month names, Thai or Arabic digits and an
+    optional ``วัน…ที่`` weekday prefix, i.e. the output of ``format_thai_date``.
+
+    >>> parse_thai_date("29 ก.ย. 2569")
+    datetime.date(2026, 9, 29)
+    """
+    parts = from_thai_digits(value).split()
+    if parts and parts[0].startswith("วัน"):
+        parts = parts[1:]
+    if len(parts) != 3:
+        raise ValueError(f"invalid Thai date: {value!r}")
+    day, month_name, year = parts
+    if month_name in THAI_MONTHS:
+        month = THAI_MONTHS.index(month_name) + 1
+    elif month_name in THAI_MONTHS_SHORT:
+        month = THAI_MONTHS_SHORT.index(month_name) + 1
+    else:
+        raise ValueError(f"unknown Thai month: {month_name!r}")
+    if not (day.isdigit() and year.isdigit()):
+        raise ValueError(f"invalid Thai date: {value!r}")
+    return datetime.date(be_to_ce(int(year)), month, int(day))
