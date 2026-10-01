@@ -9,6 +9,7 @@ from demo_utils.thai import (
     contains_thai,
     format_thai_date,
     from_thai_digits,
+    is_valid_thai_mobile,
     is_valid_thai_id,
     number_to_thai_words,
     parse_thai_date,
@@ -197,3 +198,18 @@ def test_parse_thai_date_round_trips_format_thai_date(options):
 def test_parse_thai_date_invalid(value):
     with pytest.raises(ValueError):
         parse_thai_date(value)
+
+
+@pytest.mark.parametrize(
+    "value",
+    ["0812345678", "081-234-5678", "+66 81 234 5678", "66912345678", "๐๖๑๒๓๔๕๖๗๘"],
+)
+def test_is_valid_thai_mobile_accepts(value):
+    assert is_valid_thai_mobile(value)
+
+
+@pytest.mark.parametrize(
+    "value", ["021234567", "0712345678", "081234567", "08123456789", "", "abc"]
+)
+def test_is_valid_thai_mobile_rejects(value):
+    assert not is_valid_thai_mobile(value)

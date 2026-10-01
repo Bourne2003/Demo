@@ -214,3 +214,22 @@ def parse_thai_date(value: str) -> datetime.date:
     if not (day.isdigit() and year.isdigit()):
         raise ValueError(f"invalid Thai date: {value!r}")
     return datetime.date(be_to_ce(int(year)), month, int(day))
+
+
+def _phone_digits(value: str) -> str:
+    digits = "".join(char for char in from_thai_digits(value) if char.isdigit())
+    if digits.startswith("66") and len(digits) == 11:
+        digits = "0" + digits[2:]
+    return digits
+
+
+def is_valid_thai_mobile(value: str) -> bool:
+    """Check a Thai mobile number: 10 digits starting with 06, 08 or 09.
+
+    Spaces, dashes, ``+66`` and Thai digits are accepted.
+
+    >>> is_valid_thai_mobile("+66 81 234 5678")
+    True
+    """
+    digits = _phone_digits(value)
+    return len(digits) == 10 and digits[:2] in ("06", "08", "09")
