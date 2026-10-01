@@ -3,6 +3,7 @@ import pytest
 from demo_utils.text import (
     camel_to_snake,
     is_palindrome,
+    levenshtein,
     mask,
     normalize_whitespace,
     slugify,
@@ -133,3 +134,22 @@ def test_mask_zero_visible():
 def test_mask_negative_visible():
     with pytest.raises(ValueError):
         mask("abc", visible=-1)
+
+
+@pytest.mark.parametrize(
+    "a, b, expected",
+    [
+        ("kitten", "sitting", 3),
+        ("", "abc", 3),
+        ("abc", "", 3),
+        ("same", "same", 0),
+        ("flaw", "lawn", 2),
+        ("สวัสดี", "สวสดี", 1),
+    ],
+)
+def test_levenshtein(a, b, expected):
+    assert levenshtein(a, b) == expected
+
+
+def test_levenshtein_is_symmetric():
+    assert levenshtein("abcdef", "azced") == levenshtein("azced", "abcdef")

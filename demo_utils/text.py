@@ -93,3 +93,26 @@ def mask(value: str, visible: int = 4, char: str = "*") -> str:
         raise ValueError("visible must be non-negative")
     hidden = max(len(value) - visible, 0)
     return char * hidden + value[hidden:]
+
+
+def levenshtein(a: str, b: str) -> int:
+    """Return the edit distance (insertions, deletions, substitutions) between two strings.
+
+    >>> levenshtein("kitten", "sitting")
+    3
+    """
+    if len(a) < len(b):
+        a, b = b, a
+    previous = list(range(len(b) + 1))
+    for i, char_a in enumerate(a, start=1):
+        current = [i]
+        for j, char_b in enumerate(b, start=1):
+            current.append(
+                min(
+                    previous[j] + 1,
+                    current[j - 1] + 1,
+                    previous[j - 1] + (char_a != char_b),
+                )
+            )
+        previous = current
+    return previous[-1]
