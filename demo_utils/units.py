@@ -95,3 +95,15 @@ def fahrenheit_to_celsius(fahrenheit: float) -> float:
     100.0
     """
     return (fahrenheit - 32) * 5 / 9
+
+
+def format_number(value: float, decimals: int = 0, separator: str = ",") -> str:
+    """Format a number with thousands separators and fixed decimals.
+
+    >>> format_number(1234567.891, 2)
+    '1,234,567.89'
+    """
+    if decimals < 0:
+        raise ValueError("decimals must be non-negative")
+    text = f"{value:,.{decimals}f}"
+    return text.replace(",", separator) if separator != "," else text

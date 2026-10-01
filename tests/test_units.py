@@ -5,6 +5,7 @@ from demo_utils.units import (
     fahrenheit_to_celsius,
     format_bytes,
     format_duration,
+    format_number,
     parse_bytes,
     parse_duration,
 )
@@ -105,3 +106,27 @@ def test_format_duration_negative():
 def test_temperature_conversions(celsius, fahrenheit):
     assert celsius_to_fahrenheit(celsius) == pytest.approx(fahrenheit)
     assert fahrenheit_to_celsius(fahrenheit) == pytest.approx(celsius)
+
+
+@pytest.mark.parametrize(
+    "value, decimals, expected",
+    [
+        (0, 0, "0"),
+        (999, 0, "999"),
+        (1000, 0, "1,000"),
+        (1234567.891, 2, "1,234,567.89"),
+        (-9876543, 0, "-9,876,543"),
+        (0.5, 1, "0.5"),
+    ],
+)
+def test_format_number(value, decimals, expected):
+    assert format_number(value, decimals) == expected
+
+
+def test_format_number_custom_separator():
+    assert format_number(1234567, separator=" ") == "1 234 567"
+
+
+def test_format_number_negative_decimals():
+    with pytest.raises(ValueError):
+        format_number(1, -1)
