@@ -157,3 +157,17 @@ def test_thai_ratio_ignores_digits_and_punctuation():
 )
 def test_remove_thai_tone_marks(value, expected):
     assert remove_thai_tone_marks(value) == expected
+
+
+def test_format_thai_date_with_weekday():
+    assert (
+        format_thai_date(datetime.date(2026, 9, 29), weekday=True)
+        == "วันอังคารที่ 29 กันยายน 2569"
+    )
+
+
+def test_format_thai_date_weekday_short_thai_digits():
+    assert (
+        format_thai_date(datetime.date(2026, 10, 4), short=True, thai_digits=True, weekday=True)
+        == "วันอาทิตย์ที่ ๔ ต.ค. ๒๕๖๙"
+    )
