@@ -1,5 +1,6 @@
 """Helpers for lists and other iterables."""
 
+from copy import deepcopy
 from collections import deque
 from itertools import islice
 from typing import (
@@ -138,10 +139,10 @@ def deep_merge(base: Dict[Any, Any], override: Dict[Any, Any]) -> Dict[Any, Any]
     >>> deep_merge({"db": {"host": "a", "port": 1}}, {"db": {"port": 2}})
     {'db': {'host': 'a', 'port': 2}}
     """
-    merged = dict(base)
+    merged = deepcopy(base)
     for key, value in override.items():
         if isinstance(merged.get(key), dict) and isinstance(value, dict):
             merged[key] = deep_merge(merged[key], value)
         else:
-            merged[key] = value
+            merged[key] = deepcopy(value)
     return merged

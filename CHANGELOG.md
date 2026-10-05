@@ -4,6 +4,7 @@
 
 ### Fixed
 - `units.parse_duration` now rejects inputs that repeat a time unit instead of silently adding them.
+- `collections.deep_merge` now deep-copies nested values so the returned mapping cannot mutate its inputs.
 
 ## 0.4.0 - 2026-10-01
 
