@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- `units.parse_duration` now rejects inputs that repeat a time unit instead of silently adding them.
+
 ## 0.4.0 - 2026-10-01
 
 ### Added
