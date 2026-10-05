@@ -48,6 +48,7 @@ def parse_duration(value: str) -> int:
     """Parse a duration such as ``"1h30m"`` into seconds.
 
     Supported units: ``d``, ``h``, ``m``, ``s``.
+    Each unit may appear at most once.
 
     >>> parse_duration("1h30m")
     5400
@@ -55,10 +56,11 @@ def parse_duration(value: str) -> int:
     text = value.replace(" ", "").lower()
     if not text or _DURATION_PART.sub("", text):
         raise ValueError(f"invalid duration: {value!r}")
-    return sum(
-        int(amount) * _DURATION_UNITS[unit]
-        for amount, unit in _DURATION_PART.findall(text)
-    )
+    parts = _DURATION_PART.findall(text)
+    units = [unit for _, unit in parts]
+    if len(units) != len(set(units)):
+        raise ValueError(f"duplicate duration unit: {value!r}")
+    return sum(int(amount) * _DURATION_UNITS[unit] for amount, unit in parts)
 
 
 def format_duration(seconds: int) -> str:

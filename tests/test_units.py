@@ -49,7 +49,7 @@ def test_parse_duration(value, expected):
     assert parse_duration(value) == expected
 
 
-@pytest.mark.parametrize("value", ["", "10", "5x", "1h-2m", "h"])
+@pytest.mark.parametrize("value", ["", "10", "5x", "1h-2m", "h", "1h30m2m"])
 def test_parse_duration_invalid(value):
     with pytest.raises(ValueError):
         parse_duration(value)
