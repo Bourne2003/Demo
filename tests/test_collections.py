@@ -149,3 +149,12 @@ def test_deep_merge_does_not_modify_inputs():
     deep_merge(base, override)
     assert base == {"a": {"b": 1}}
     assert override == {"a": {"c": 2}}
+
+
+def test_deep_merge_does_not_share_nested_values():
+    base = {"settings": {"tags": ["stable"]}}
+    result = deep_merge(base, {})
+
+    result["settings"]["tags"].append("new")
+
+    assert base == {"settings": {"tags": ["stable"]}}
